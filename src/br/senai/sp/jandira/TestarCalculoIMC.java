@@ -1,5 +1,7 @@
 package br.senai.sp.jandira;
 
+import br.senai.sp.jandira.CalcularIMC;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,19 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class CalculoIMC extends JFrame implements ActionListener {
+public class TestarCalculoIMC extends JFrame implements ActionListener {
 
 	JButton btnCalcular=new JButton("Calcular IMC");
 	JButton btnSair=new JButton("Sair");
 	
 	JLabel lblTitulo=new JLabel("Cálculo do IMC");
 	JLabel lblPeso=new JLabel("Peso em kg:");
-	JLabel lblAltura=new JLabel("Altura em cm:");
+	JLabel lblAltura=new JLabel("Altura em metros:");
 			
 	JTextField txtPeso=new JTextField();
 	JTextField txtAltura=new JTextField();
 	
-	public CalculoIMC() {
+	public TestarCalculoIMC() {
 		
 		btnCalcular.addActionListener(this);
 		btnSair.addActionListener(this);
@@ -35,8 +37,8 @@ public class CalculoIMC extends JFrame implements ActionListener {
 		
 		// Label
 		lblTitulo.setBounds(200,10,300,30);
-		lblAltura.setBounds(170, 120, 100, 20);
-		lblPeso.setBounds(170, 170, 110, 20);
+		lblAltura.setBounds(138, 123, 160, 20);
+		lblPeso.setBounds(170, 173, 110, 20);
 		add(lblTitulo);
 		add(lblAltura);
 		add(lblPeso);
@@ -59,41 +61,28 @@ public class CalculoIMC extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent evento) {
 		if(evento.getSource()==btnCalcular) {
 			if(!txtAltura.getText().equals("")&&!txtPeso.getText().equals("")) {
+				CalcularIMC c1=new CalcularIMC();
 				String strAltura=txtAltura.getText();
 				String strPeso=txtPeso.getText();
-				int alturaCm=Integer.parseInt(strAltura);
-				int peso=Integer.parseInt(strPeso);
-				double altura=alturaCm/100;
-				double imc=peso/(altura*altura);
-				String classificacao;
-				if(imc<18.5) {
-					classificacao="Baixo peso.";
-				}
-				else if(imc>=18.6&&imc<=24.9) {
-					classificacao="Peso normal.";
-				}
-				else if(imc>=25&&imc<=29.9) {
-					classificacao="Sobrepeso.";
-				}
-				else if(imc>=30&&imc<=34.9) {
-					classificacao="Obesidade grau I";
-				}
-				else if(imc>=35&&imc<=39.9) {
-					classificacao="Obesidade grau II";
-				}
-				else {
-					classificacao="Obesidade grau III";
-				}
-				JOptionPane.showMessageDialog(null, "IMC: "+imc+"\nClassificação"+classificacao);
+				double altura=Double.parseDouble(strAltura);
+				double peso=Double.parseDouble(strPeso);
+				c1.altura=altura;
+				c1.peso=peso;
+				double imc=c1.calcularImc();
+				String classificacao=c1.classificarImc();
+				JOptionPane.showMessageDialog(null, "IMC: " + imc + "\nClassificação: " + classificacao);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Por favor, insira os dois valores.");
 			}
 		}
+		else if(evento.getSource()==btnSair) {
+			System.exit(0);
+		}
 	}
 	
 	public static void main(String[] args) {
-		new CalculoIMC();
+		new TestarCalculoIMC();
 		}
 	
 }
